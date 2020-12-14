@@ -48,3 +48,99 @@
 #
 # For each group, count the number of questions to which anyone answered "yes". What is the sum of those counts?
 
+
+# --- Part Two ---
+#
+# As you finish the last group's customs declaration, you notice that you misread one word in the instructions:
+#
+# You don't need to identify the questions to which anyone answered "yes"; you need to identify the questions to which
+# everyone answered "yes"!
+#
+# Using the same example as above:
+#
+# abc
+#
+# a
+# b
+# c
+#
+# ab
+# ac
+#
+# a
+# a
+# a
+# a
+#
+# b
+#
+# This list represents answers from five groups:
+#
+#     In the first group, everyone (all 1 person) answered "yes" to 3 questions: a, b, and c.
+#     In the second group, there is no question to which everyone answered "yes".
+#     In the third group, everyone answered yes to only 1 question, a. Since some people did not answer "yes" to b or c,
+#     they don't count.
+#     In the fourth group, everyone answered yes to only 1 question, a.
+#     In the fifth group, everyone (all 1 person) answered "yes" to 1 question, b.
+#
+# In this example, the sum of these counts is 3 + 0 + 1 + 1 + 1 = 6.
+#
+# For each group, count the number of questions to which everyone answered "yes". What is the sum of those counts?
+
+import string
+data = open('/Users/jadab/PycharmProjects/adventofcode/day6', "r")
+raw = data.readlines()
+group_list = []
+for line in raw:
+    group_list.append(line)
+
+#print(group_list)
+
+for x in range(len(group_list)):
+    group_list[x] = group_list[x].replace("\n", "")
+#print(group_list)
+
+index = 0
+group = []
+clean_list = []
+while index < len(group_list):
+    if group_list[index] != '':
+        group.append(group_list[index])
+        index += 1
+    else:
+        #print(group)
+        clean_list.append(group)
+        group = []
+        index += 1
+clean_list.append(group)
+print("clean: " , clean_list)
+
+def yes_counter(group):
+    yes = []
+    for person in group:
+        for question in person:
+            if question not in yes:
+                yes.append(question)
+
+    return len(yes)
+
+def all_yes_counter(group):
+    alphabet = list(string.ascii_lowercase)
+    questions = list(string.ascii_lowercase)
+    for person in group:
+        for letter in alphabet:
+            if letter not in person and letter in questions:
+                questions.remove(letter)
+    return len(questions)
+print("checking", len(clean_list), "groups")
+sum = 0
+group_num = 0
+for group in clean_list:
+    print("group", group_num, "has",  all_yes_counter(group), "yes's")
+
+    sum += all_yes_counter(group)
+    print("current sum:", sum)
+    group_num += 1
+
+
+print(sum)
