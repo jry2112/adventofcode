@@ -74,4 +74,32 @@ for line in raw:
 print(bag_list[0])
 print(bag_list[1])
 print(bag_list[2])
-print(bags_with_shiny_gold)
+
+checked_bags = []
+
+def parent_shiny_gold(bag):
+    # returns True if bag contains shiny gold in original list
+    bags_in_bag = list(bag.values())
+    if "shiny gold bag" in list(bags_in_bag[0].keys()):
+        print(str(bag.keys()))
+        return checked_bags.append(bag)
+    else:
+        for bag in list(bags_in_bag[0].keys()):
+            if bag not in checked_bags:
+                bag = bag_list[0][bag]
+                parent_shiny_gold(bag)
+
+
+count = 0
+
+#for bag in range(0, len(bag_list)):
+ #   count += parent_shiny_gold(bag_list[bag])
+print()
+print(count)
+
+print(bag_list[3])
+bags_in_bag = list(bag_list[3].values())
+print(bags_in_bag)
+print(list(bags_in_bag[0].keys()))
+
+parent_shiny_gold(bag_list[3])
