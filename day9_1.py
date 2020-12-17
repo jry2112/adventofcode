@@ -124,7 +124,7 @@ while check_flag == False:
 
 # Actual
 numbers_list = []
-raw = open('/Users/jadab/PycharmProjects/adventofcode/day9', "r")
+raw = open('day9', "r")
 line = raw.readline()
 for line in raw:
     number = int(line)
@@ -160,5 +160,21 @@ target = next_num
 sum_list = []
 sum = 0
 start = 0
+index = 0
 
-while sum < target:
+while sum != target:
+    current_num = numbers_list[index]
+    sum_list.append(current_num)
+    sum += current_num
+    if sum == target:
+        # sort the sum list and add smallest and largest numbers
+        print("encryption weakness:", (min(sum_list) + max(sum_list)))
+    elif sum < target:
+        index += 1
+    else:
+        print(f"checked this list: {sum_list}, maxed at: {sum}")
+        start += 1
+        index = start
+        sum = 0
+        sum_list = []
+        print(f'restarting at {index}')
