@@ -146,3 +146,79 @@ print(differences)
 differences[3] += 1
 print()
 print("product of 1 and 3: ", differences[1] * differences[3])
+
+class Vertex:
+    def __init__(self, key, data):
+        self.adjacency_list = {}
+        self.key = key
+        self.data = data
+        self.curr_cost = 0 # stores own weight added with followers in path
+
+    def connect(self, other_vertex, weight):
+        self.adjacency_list[otherVertex] = weight
+
+    def get_connections(self):
+        return self.adjacency_list.keys()
+
+    def get_cost(self, vertex):
+        return self.adjacency_list[vertex]
+
+from Vertex import Vertex
+
+"""
+This class is a weighted directed graph that is
+supposed to be able to find all paths between two nodes
+
+* The graph sorts all the paths by weight
+* The graphs vertices uses keys to allow duplicates of data
+* The graphs depth first search is based on recursion
+"""
+
+class Graph:
+    def __init__(self):
+        self.number_of_vertices = 0
+        self.vertices = {}
+
+    def add(self, key, data):
+        if key not in self.vertices:
+            self.number_of_vertices += 1
+            self.vertices[key] = Vertex(key, data)
+            return True
+
+        return False
+
+    def add_edge(self, from_vertex, to_vertex, weight):
+        if from_vertex in self.vertices and to_vertex in self.vertices:
+            self.vertices[from_vertex].connect(to_vertex, weight)
+            return True
+
+        return False
+
+    def get_all_paths(self, start, end):
+        return self.dfs(start, end, [], [], [])
+
+    def get_all_paths_sorted(self, start, end):
+        res = self,dfs(start, end, [], [], [])
+        return sorted(res, key=lambda k: k['cost'])
+
+    def dfs(self, curr_vertex, dest_vertex, visited, path, full_path):
+        # get vertex, it is now visited and should be added to path
+        vertex = self.vertices[curr_vertex]
+        visited.append(curr_vertex)
+        path.append(vertex.data)
+
+        #save current path if we found end
+        if curr_vertex == dest_vertex:
+            full_path.append(({"path": list(path), "cost": vertex.curr_cost}))
+
+        for i in vertex.get_connections():
+            if i not in visited:
+                self.vertices[i].curr_cost = vertex.get_cost(i) + vertex.curr_cost
+                self.dfs(i, dest_vertex, visited, path, full_path)
+
+        # continue finding paths by popping path and visited to get accurate paths
+        path.pop()
+        visited.pop()
+
+        if not path:
+            return full_path
