@@ -9,7 +9,7 @@ def parse(file):
         for column in range(0, len(input_list[row])):
             char = input_list[row][column]
             row_of_seats.append(char)
-            if len(row_of_seats) == len(input_list[column]):
+            if len(row_of_seats) == len(input_list[row]):
                 clean_list.append(row_of_seats)
     return clean_list
 
@@ -65,7 +65,7 @@ class SeatingSystem:
     def empty_seat_update(self, seat, adjacency_list):
         if seat == self.empty_seat:
             if self.occupied_seat not in adjacency_list:
-                seat == self.occupied_seat
+                seat = self.occupied_seat
         return seat
 
     def occupied_seat_update(self, seat, adjacency_list):
@@ -75,20 +75,40 @@ class SeatingSystem:
                 if spot == self.occupied_seat:
                     count += 1
             if count >= 4:
-                seat == self.empty_seat
+                seat = self.empty_seat
         return seat
 
-test = SeatingSystem('day11test')
+    def find_seat_changes(self):
+        previous_seat_layout = copy.deepcopy(self.seat_list)
+        new_layout = self.seat_list
+        for row in range(0, len(self.seat_list)):
+            for column in range(0, len(self.seat_list[row])):
+                new_layout[row][column] = self.update_seat(row, column)
+                self.seat_list = new_layout
+        return previous_seat_layout == new_layout
+
+test = SeatingSystem('day11')
 original_list = test.original_seat_list
 test.display_original_seat_layout()
 print()
 test.display_clean_seat_layout()
 
 new_layout = test.seat_list
-for row in range(0, len(original_list)):
-    for column in range(0, len(original_list[row])):
+for row in range(0, len(test.seat_list)):
+    for column in range(0, len(test.seat_list[row])):
         new_layout[row][column] = test.update_seat(row, column)
 test.seat_list = new_layout
 
 print()
 test.display_clean_seat_layout()
+
+print()
+for x in range(0, 100):
+    if test.find_seat_changes() == True:
+        count = 0
+        for row in range(0, len(test.seat_list)):
+            for column in range(0, len(test.seat_list[row])):
+                if test.seat_list[row][column] == test.occupied_seat:
+                    count += 1
+    print(count)
+print(test.seat_list)
